@@ -8,7 +8,7 @@
 //
 // Original Author:  
 //         Created:  Sun Jan  6 23:57:00 EST 2008
-// $Id: CaloJetEveProxy3DLegoBuilder.cc,v 1.6 2008/03/07 09:06:48 dmytro Exp $
+// $Id: CaloJetEveProxy3DLegoBuilder.cc,v 1.1.2.1 2008/03/17 02:19:58 dmytro Exp $
 //
 
 // system include files
@@ -98,7 +98,7 @@ CaloJetEveProxy3DLegoBuilder::build(const FWEventItem* iItem, TEveElementList** 
        jet != jets->end(); ++jet, ++counter) {
       TEveElementList* container = new TEveElementList( counter.str().c_str() );
       
-      TGeoTube *shape = new TGeoTube(0, 0.5, 0.0001);
+      TGeoTube *shape = new TGeoTube(0.48, 0.5, 0.0001);
       TEveTrans t;
       t.RotateLF(1,2,M_PI/2);
       t(1,4) = jet->eta(); 
