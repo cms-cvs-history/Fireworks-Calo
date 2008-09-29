@@ -8,7 +8,7 @@
 //
 // Original Author:  
 //         Created:  Sun Jan  6 23:57:00 EST 2008
-// $Id: CaloJetProxyRhoPhiZ2DBuilder.cc,v 1.17 2008/08/09 23:58:21 dmytro Exp $
+// $Id$
 //
 
 // system include files
@@ -124,9 +124,9 @@ std::pair<int,int> CaloJetProxyRhoPhiZ2DBuilder::getiEtaRange( const reco::Jet& 
    int min =  100;
    int max = -100;
 
-   std::vector<CaloTowerPtr> towers;
+   std::vector<CaloTowerRef> towers;
    if ( const reco::CaloJet* calojet = dynamic_cast<const reco::CaloJet*>(&jet) )
-     towers = calojet->getCaloConstituents();
+     towers = calojet->getConstituents();
    else {
       if ( const pat::Jet* patjet = dynamic_cast<const pat::Jet*>(&jet) ){
 	 if ( patjet->isCaloJet() )
@@ -134,7 +134,7 @@ std::pair<int,int> CaloJetProxyRhoPhiZ2DBuilder::getiEtaRange( const reco::Jet& 
       }
    }
    
-   for ( std::vector<CaloTowerPtr>::const_iterator tower = towers.begin(); 
+   for ( std::vector<CaloTowerRef>::const_iterator tower = towers.begin(); 
 	 tower != towers.end(); ++tower ) 
      {
 	unsigned int ieta = 41 + (*tower)->id().ieta();
@@ -150,9 +150,9 @@ std::pair<int,int> CaloJetProxyRhoPhiZ2DBuilder::getiEtaRange( const reco::Jet& 
 
 std::pair<double,double> CaloJetProxyRhoPhiZ2DBuilder::getPhiRange( const reco::Jet& jet )
 {
-   std::vector<CaloTowerPtr> towers;
+   std::vector<CaloTowerRef> towers;
    if ( const reco::CaloJet* calojet = dynamic_cast<const reco::CaloJet*>(&jet) )
-     towers = calojet->getCaloConstituents();
+     towers = calojet->getConstituents();
    else {
       if ( const pat::Jet* patjet = dynamic_cast<const pat::Jet*>(&jet) ){
 	 if ( patjet->isCaloJet() )
@@ -160,7 +160,7 @@ std::pair<double,double> CaloJetProxyRhoPhiZ2DBuilder::getPhiRange( const reco::
       }
    }
    std::vector<double> phis;
-   for ( std::vector<CaloTowerPtr>::const_iterator tower = towers.begin(); 
+   for ( std::vector<CaloTowerRef>::const_iterator tower = towers.begin(); 
 	 tower != towers.end(); ++tower )
      phis.push_back( (*tower)->phi() );
    
