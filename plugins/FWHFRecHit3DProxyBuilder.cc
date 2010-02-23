@@ -27,39 +27,19 @@ private:
 void
 FWHFRecHit3DProxyBuilder::build(const HFRecHit& iData, unsigned int iIndex, TEveElement& oItemHolder) const
 {
-   // FIXME: This is what I need, but it's not there in the geometry file.
-   //
-   //      std::vector<TEveVector> corners = item()->getGeom()->getPoints(iData.id());
-   //       if( corners.empty() ) {
-   //          std::cout << "ERROR: failed get geometry of ECAL rechit with det id: " <<
-   //          iData.id() << std::endl;
-   //          return;
-   //       }
-   const TGeoHMatrix* matrix = item()->getGeom()->getMatrix(iData.id());
-   if ( !matrix ) {
-     std::cout << "ERROR: failed get geometry of HCAL rechit with det id: " <<
-       iData.id() << std::endl;
-     return;
-   }	 
+   std::vector<TEveVector> corners = item()->getGeom()->getPoints(iData.detid().rawId());
+   if( corners.empty() ) {
+      return;
+   }
 
-   // FIXME: This is a blind guess for the moment.
-   Double_t localFront1Point[3] = { 1.74,  1.74, 0.0};
-   Double_t localFront2Point[3] = {-1.74,  1.74, 0.0};
-   Double_t localFront3Point[3] = {-1.74, -1.74, 0.0};
-   Double_t localFront4Point[3] = { 1.74, -1.74, 0.0};
-   Double_t localBack1Point[3] = { 1.74,  1.74, 1.0};
-   Double_t localBack2Point[3] = {-1.74,  1.74, 1.0};
-   Double_t localBack3Point[3] = {-1.74, -1.74, 1.0};
-   Double_t localBack4Point[3] = { 1.74, -1.74, 1.0};
-
-   Double_t globalFront1Point[3];
-   Double_t globalFront2Point[3];
-   Double_t globalFront3Point[3];
-   Double_t globalFront4Point[3];
-   Double_t globalBack1Point[3];
-   Double_t globalBack2Point[3];
-   Double_t globalBack3Point[3];
-   Double_t globalBack4Point[3];
+   Double_t globalFront1Point[3] = {corners[0].fX,  corners[0].fY, corners[0].fZ};
+   Double_t globalFront2Point[3] = {corners[1].fX,  corners[1].fY, corners[1].fZ};
+   Double_t globalFront3Point[3] = {corners[2].fX,  corners[2].fY, corners[2].fZ};
+   Double_t globalFront4Point[3] = {corners[3].fX,  corners[3].fY, corners[3].fZ};
+   Double_t globalBack1Point[3] = {corners[4].fX,  corners[4].fY, corners[4].fZ};
+   Double_t globalBack2Point[3] = {corners[5].fX,  corners[5].fY, corners[5].fZ};
+   Double_t globalBack3Point[3] = {corners[6].fX,  corners[6].fY, corners[6].fZ};
+   Double_t globalBack4Point[3] = {corners[7].fX,  corners[7].fY, corners[7].fZ};
 
    TEveStraightLineSet* rechitSet = new TEveStraightLineSet("HF Rec Hit");
    rechitSet->SetLineWidth(3);
@@ -70,27 +50,6 @@ FWHFRecHit3DProxyBuilder::build(const HFRecHit& iData, unsigned int iIndex, TEve
    Float_t scale = 10.0; 	// FIXME: The scale should be taken form somewhere else
    Float_t energy = iData.energy();
    Float_t eScale = scale * energy;
-
-   if(iData.detid().subdetId() == 1)
-   {
-     // FIXME: This is HF barrel and the rechits transformation
-     // is inwards for some reason.
-     eScale = -eScale;
-   }
-
-   localBack1Point[2] = eScale;
-   localBack2Point[2] = eScale;
-   localBack3Point[2] = eScale;
-   localBack4Point[2] = eScale;
-
-   matrix->LocalToMaster(localFront1Point, globalFront1Point);
-   matrix->LocalToMaster(localFront2Point, globalFront2Point);
-   matrix->LocalToMaster(localFront3Point, globalFront3Point);
-   matrix->LocalToMaster(localFront4Point, globalFront4Point);
-   matrix->LocalToMaster(localBack1Point, globalBack1Point);
-   matrix->LocalToMaster(localBack2Point, globalBack2Point);
-   matrix->LocalToMaster(localBack3Point, globalBack3Point);
-   matrix->LocalToMaster(localBack4Point, globalBack4Point);
 
    rechitSet->AddLine(globalFront1Point[0], globalFront1Point[1], globalFront1Point[2],
 		      globalFront2Point[0], globalFront2Point[1], globalFront2Point[2]);
