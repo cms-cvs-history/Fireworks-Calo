@@ -1,9 +1,7 @@
-#include "Fireworks/Core/interface/register_dataproxybuilder_macro.h"
 #include "Fireworks/Core/interface/FW3DSimpleProxyBuilderTemplate.h"
 #include "Fireworks/Core/interface/FWEventItem.h"
 #include "Fireworks/Core/interface/DetIdToMatrix.h"
 #include "DataFormats/HcalRecHit/interface/HFRecHit.h"
-#include "TEveBoxSet.h"
 #include "TEveCompound.h"
 #include "TEveStraightLineSet.h"
 
@@ -20,12 +18,14 @@ public:
    REGISTER_PROXYBUILDER_METHODS();
 
 private:
-   FWHFRecHit3DProxyBuilder(const FWHFRecHit3DProxyBuilder&); 			// stop default
-   const FWHFRecHit3DProxyBuilder& operator=(const FWHFRecHit3DProxyBuilder&); 	// stop default
-
    void build(const HFRecHit& iData, unsigned int iIndex, TEveElement& oItemHolder) const;
 
    Float_t m_maxEnergy;
+
+   // Disable default copy constructor
+   FWHFRecHit3DProxyBuilder(const FWHFRecHit3DProxyBuilder&);
+   // Disable default assignment operator
+   const FWHFRecHit3DProxyBuilder& operator=(const FWHFRecHit3DProxyBuilder&);
 };
 
 void
@@ -52,25 +52,11 @@ FWHFRecHit3DProxyBuilder::build(const HFRecHit& iData, unsigned int iIndex, TEve
    for(size_t i = 0; i < 8; ++i)
       corners[i] = centre + (corners[i]-centre)*scaleFraction;
 
-   const Float_t box[8*3] = {corners[0].fX,  corners[0].fY, corners[0].fZ,
-			     corners[1].fX,  corners[1].fY, corners[1].fZ,
-			     corners[2].fX,  corners[2].fY, corners[2].fZ,
-			     corners[3].fX,  corners[3].fY, corners[3].fZ,
-			     corners[4].fX,  corners[4].fY, corners[4].fZ,
-			     corners[5].fX,  corners[5].fY, corners[5].fZ,
-			     corners[6].fX,  corners[6].fY, corners[6].fZ,
-			     corners[7].fX,  corners[7].fY, corners[7].fZ};
-   
-   TEveBoxSet* recHit = new TEveBoxSet("HF Rec Hit");
-   recHit->Reset(TEveBoxSet::kBT_FreeBox, kTRUE, 64);
-   recHit->AddBox(box);
-     
    TEveStraightLineSet* rechitSet = new TEveStraightLineSet("HF Rec Hit");
    rechitSet->SetLineWidth(3);
    rechitSet->SetMainColor(item()->defaultDisplayProperties().color());
    rechitSet->SetRnrSelf(item()->defaultDisplayProperties().isVisible());
    rechitSet->SetRnrChildren(item()->defaultDisplayProperties().isVisible());
-
 
    for(int j = 0; j < 3; ++j)
    {
@@ -90,7 +76,6 @@ FWHFRecHit3DProxyBuilder::build(const HFRecHit& iData, unsigned int iIndex, TEve
    rechitSet->AddLine(corners[7].fX,  corners[7].fY, corners[7].fZ,
 		      corners[4].fX,  corners[4].fY, corners[4].fZ);
 
-   rechitSet->AddElement(recHit);
    oItemHolder.AddElement(rechitSet);
 }
 

@@ -1,9 +1,7 @@
-#include "Fireworks/Core/interface/register_dataproxybuilder_macro.h"
 #include "Fireworks/Core/interface/FW3DSimpleProxyBuilderTemplate.h"
 #include "Fireworks/Core/interface/FWEventItem.h"
 #include "Fireworks/Core/interface/DetIdToMatrix.h"
 #include "DataFormats/HcalRecHit/interface/HORecHit.h"
-#include "TEveBoxSet.h"
 #include "TEveCompound.h"
 #include "TEveStraightLineSet.h"
 
@@ -20,12 +18,14 @@ public:
    REGISTER_PROXYBUILDER_METHODS();
 
 private:
-   FWHORecHit3DProxyBuilder(const FWHORecHit3DProxyBuilder&); 			// stop default
-   const FWHORecHit3DProxyBuilder& operator=(const FWHORecHit3DProxyBuilder&); 	// stop default
-
    void build(const HORecHit& iData, unsigned int iIndex, TEveElement& oItemHolder) const;
 
    Float_t m_maxEnergy;
+
+   // Disable default copy constructor
+   FWHORecHit3DProxyBuilder(const FWHORecHit3DProxyBuilder&);
+   // Disable default assignment operator
+   const FWHORecHit3DProxyBuilder& operator=(const FWHORecHit3DProxyBuilder&);
 };
 
 void
@@ -51,19 +51,6 @@ FWHORecHit3DProxyBuilder::build(const HORecHit& iData, unsigned int iIndex, TEve
    // Coordinates for a scaled version of the original box
    for(size_t i = 0; i < 8; ++i)
       corners[i] = centre + (corners[i]-centre)*scaleFraction;
-
-   const Float_t box[8*3] = {corners[0].fX,  corners[0].fY, corners[0].fZ,
-			     corners[1].fX,  corners[1].fY, corners[1].fZ,
-			     corners[2].fX,  corners[2].fY, corners[2].fZ,
-			     corners[3].fX,  corners[3].fY, corners[3].fZ,
-			     corners[4].fX,  corners[4].fY, corners[4].fZ,
-			     corners[5].fX,  corners[5].fY, corners[5].fZ,
-			     corners[6].fX,  corners[6].fY, corners[6].fZ,
-			     corners[7].fX,  corners[7].fY, corners[7].fZ};
-   
-   TEveBoxSet* recHit = new TEveBoxSet("HO Rec Hit");
-   recHit->Reset(TEveBoxSet::kBT_FreeBox, kTRUE, 64);
-   recHit->AddBox(box);
      
    TEveStraightLineSet* rechitSet = new TEveStraightLineSet("HO Rec Hit");
    rechitSet->SetLineWidth(3);
@@ -89,7 +76,6 @@ FWHORecHit3DProxyBuilder::build(const HORecHit& iData, unsigned int iIndex, TEve
    rechitSet->AddLine(corners[7].fX,  corners[7].fY, corners[7].fZ,
 		      corners[4].fX,  corners[4].fY, corners[4].fZ);
 
-   rechitSet->AddElement(recHit);
    oItemHolder.AddElement(rechitSet);
 }
 
