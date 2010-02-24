@@ -3,6 +3,7 @@
 #include "Fireworks/Core/interface/FWEventItem.h"
 #include "Fireworks/Core/interface/DetIdToMatrix.h"
 #include "DataFormats/EcalRecHit/interface/EcalRecHit.h"
+#include "TEveBoxSet.h"
 #include "TEveCompound.h"
 #include "TEveStraightLineSet.h"
 
@@ -61,7 +62,7 @@ FWEcalRecHit3DProxyBuilder::build(const EcalRecHit& iData, unsigned int iIndex, 
    Double_t globalBack4Point[3];
 
    TEveStraightLineSet* rechitSet = new TEveStraightLineSet("Ecal Rec Hit");
-   rechitSet->SetLineWidth(3);
+   rechitSet->SetLineWidth(1);
    rechitSet->SetMainColor(item()->defaultDisplayProperties().color());
    rechitSet->SetRnrSelf(item()->defaultDisplayProperties().isVisible());
    rechitSet->SetRnrChildren(item()->defaultDisplayProperties().isVisible());
@@ -118,6 +119,24 @@ FWEcalRecHit3DProxyBuilder::build(const EcalRecHit& iData, unsigned int iIndex, 
    rechitSet->AddLine(globalFront4Point[0], globalFront4Point[1], globalFront4Point[2],
 		      globalBack4Point[0], globalBack4Point[1], globalBack4Point[2]);     
 
+   const Float_t box[8*3] = {globalFront1Point[0], globalFront1Point[1], globalFront1Point[2], 	 
+			     globalFront2Point[0], globalFront2Point[1], globalFront2Point[2],
+			     globalFront3Point[0], globalFront3Point[1], globalFront3Point[2],
+			     globalFront4Point[0], globalFront4Point[1], globalFront4Point[2],
+			     globalBack1Point[0], globalBack1Point[1], globalBack1Point[2], 	 
+			     globalBack2Point[0], globalBack2Point[1], globalBack2Point[2],
+			     globalBack3Point[0], globalBack3Point[1], globalBack3Point[2],
+			     globalBack4Point[0], globalBack4Point[1], globalBack4Point[2]
+   };
+
+   // FIXME: We do not need to make a box set per hit
+   // but rather one box set per collection...
+   TEveBoxSet* recHit = new TEveBoxSet("HBHE Rec Hit"); 	 
+   recHit->Reset(TEveBoxSet::kBT_FreeBox, kTRUE, 64); 	 
+   recHit->AddBox(box);
+   recHit->DigitColor(item()->defaultDisplayProperties().color());
+
+   rechitSet->AddElement(recHit);
    oItemHolder.AddElement(rechitSet);
 }
 
