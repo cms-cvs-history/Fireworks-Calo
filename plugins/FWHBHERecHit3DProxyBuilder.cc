@@ -3,9 +3,7 @@
 #include "Fireworks/Core/interface/DetIdToMatrix.h"
 #include "Fireworks/Calo/interface/CaloUtils.h"
 #include "DataFormats/HcalRecHit/interface/HBHERecHit.h"
-#include "TEveBoxSet.h"
 #include "TEveCompound.h"
-#include "TEveStraightLineSet.h"
 
 class FWHBHERecHit3DProxyBuilder : public FW3DSimpleProxyBuilderTemplate<HBHERecHit>
 {
