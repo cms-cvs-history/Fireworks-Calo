@@ -9,7 +9,7 @@ class FWHBHERecHit3DProxyBuilder : public FW3DSimpleProxyBuilderTemplate<HBHERec
 {
 public:
    FWHBHERecHit3DProxyBuilder(void)
-     : m_maxEnergy(5.0)
+     : m_maxEnergy(0.85)
     {}
   
    virtual ~FWHBHERecHit3DProxyBuilder(void) 

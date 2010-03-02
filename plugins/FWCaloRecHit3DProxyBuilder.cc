@@ -1,4 +1,3 @@
-#include "Fireworks/Core/interface/register_dataproxybuilder_macro.h"
 #include "Fireworks/Core/interface/FW3DSimpleProxyBuilderTemplate.h"
 #include "Fireworks/Core/interface/FWEventItem.h"
 #include "Fireworks/Core/interface/DetIdToMatrix.h"
@@ -18,8 +17,10 @@ public:
    REGISTER_PROXYBUILDER_METHODS();
 
 private:
-   FWCaloRecHit3DProxyBuilder(const FWCaloRecHit3DProxyBuilder&); 			// stop default
-   const FWCaloRecHit3DProxyBuilder& operator=(const FWCaloRecHit3DProxyBuilder&); 	// stop default
+   // Disable default copy constructor
+   FWCaloRecHit3DProxyBuilder(const FWCaloRecHit3DProxyBuilder&);
+   // Disable default assignment operator
+   const FWCaloRecHit3DProxyBuilder& operator=(const FWCaloRecHit3DProxyBuilder&);
 
    void build(const CaloRecHit& iData, unsigned int iIndex, TEveElement& oItemHolder) const;
 };

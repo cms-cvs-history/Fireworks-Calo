@@ -1,6 +1,5 @@
 #include "TEveBoxSet.h"
 #include "TEveCompound.h"
-#include "TEveStraightLineSet.h"
 #include "Fireworks/Core/interface/FWEventItem.h"
 
 namespace fireworks {
@@ -26,36 +25,12 @@ namespace fireworks {
       // FIXME: We do not need to make a box set per hit
       // but rather one box set per collection...
       TEveBoxSet* recHit = new TEveBoxSet("Rec Hit"); 	 
-      recHit->Reset(TEveBoxSet::kBT_FreeBox, kTRUE, 64); 	 
+      recHit->Reset(TEveBoxSet::kBT_FreeBox, kTRUE, 1);
+      recHit->SetPickable(true);
       recHit->AddBox(box);
       recHit->DigitColor(iItem->defaultDisplayProperties().color());
 	    
-      TEveStraightLineSet* rechitSet = new TEveStraightLineSet("Rec Hit");
-      rechitSet->SetLineWidth(1);
-      rechitSet->SetMainColor(iItem->defaultDisplayProperties().color());
-      rechitSet->SetRnrSelf(iItem->defaultDisplayProperties().isVisible());
-      rechitSet->SetRnrChildren(iItem->defaultDisplayProperties().isVisible());
-
-      for(int j = 0; j < 3; ++j)
-      {
-	 rechitSet->AddLine(corners[j].fX,   corners[j].fY,   corners[j].fZ,
-			    corners[j+1].fX, corners[j+1].fY, corners[j+1].fZ);
-	 rechitSet->AddLine(corners[j+4].fX, corners[j+4].fY, corners[j+4].fZ,
-			    corners[j+5].fX, corners[j+5].fY, corners[j+5].fZ);
-	 rechitSet->AddLine(corners[j].fX,   corners[j].fY,   corners[j].fZ,
-			    corners[j+4].fX, corners[j+4].fY, corners[j+4].fZ);
-      }
-      rechitSet->AddLine(corners[3].fX, corners[3].fY, corners[3].fZ,
-			 corners[7].fX, corners[7].fY, corners[7].fZ);
-   
-      rechitSet->AddLine(corners[3].fX,  corners[3].fY, corners[3].fZ,
-			 corners[0].fX,  corners[0].fY, corners[0].fZ);
-
-      rechitSet->AddLine(corners[7].fX,  corners[7].fY, corners[7].fZ,
-			 corners[4].fX,  corners[4].fY, corners[4].fZ);
-
-      rechitSet->AddElement(recHit);
-      oItemHolder.AddElement(rechitSet);
+      oItemHolder.AddElement(recHit);
    }
   
    void drawEcalHit3D(std::vector<TEveVector> &corners, const FWEventItem* iItem, class TEveElement &oItemHolder, Float_t scale)
@@ -80,35 +55,11 @@ namespace fireworks {
       // FIXME: We do not need to make a box set per hit
       // but rather one box set per collection...
       TEveBoxSet* recHit = new TEveBoxSet("Rec Hit"); 	 
-      recHit->Reset(TEveBoxSet::kBT_FreeBox, kTRUE, 64); 	 
+      recHit->Reset(TEveBoxSet::kBT_FreeBox, kTRUE, 1); 	 
+      recHit->SetPickable(true);
       recHit->AddBox(box);
       recHit->DigitColor(iItem->defaultDisplayProperties().color());
 	    
-      TEveStraightLineSet* rechitSet = new TEveStraightLineSet("Rec Hit");
-      rechitSet->SetLineWidth(1);
-      rechitSet->SetMainColor(iItem->defaultDisplayProperties().color());
-      rechitSet->SetRnrSelf(iItem->defaultDisplayProperties().isVisible());
-      rechitSet->SetRnrChildren(iItem->defaultDisplayProperties().isVisible());
-
-      for(int j = 0; j < 3; ++j)
-      {
-	 rechitSet->AddLine(corners[j].fX,   corners[j].fY,   corners[j].fZ,
-			    corners[j+1].fX, corners[j+1].fY, corners[j+1].fZ);
-	 rechitSet->AddLine(corners[j+4].fX, corners[j+4].fY, corners[j+4].fZ,
-			    corners[j+5].fX, corners[j+5].fY, corners[j+5].fZ);
-	 rechitSet->AddLine(corners[j].fX,   corners[j].fY,   corners[j].fZ,
-			    corners[j+4].fX, corners[j+4].fY, corners[j+4].fZ);
-      }
-      rechitSet->AddLine(corners[3].fX, corners[3].fY, corners[3].fZ,
-			 corners[7].fX, corners[7].fY, corners[7].fZ);
-   
-      rechitSet->AddLine(corners[3].fX,  corners[3].fY, corners[3].fZ,
-			 corners[0].fX,  corners[0].fY, corners[0].fZ);
-
-      rechitSet->AddLine(corners[7].fX,  corners[7].fY, corners[7].fZ,
-			 corners[4].fX,  corners[4].fY, corners[4].fZ);
-
-      rechitSet->AddElement(recHit);
-      oItemHolder.AddElement(rechitSet);
+      oItemHolder.AddElement(recHit);
    }
 }
