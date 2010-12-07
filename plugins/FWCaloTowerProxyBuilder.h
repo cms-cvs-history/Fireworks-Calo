@@ -16,7 +16,7 @@
 //
 // Original Author:  Chris Jones
 //         Created:  Wed Dec  3 11:28:08 EST 2008
-// $Id: FWCaloTowerProxyBuilder.h,v 1.14 2010/06/08 13:44:47 amraktad Exp $
+// $Id: FWCaloTowerProxyBuilder.h,v 1.15 2010/06/14 16:58:15 amraktad Exp $
 //
 
 #include "Rtypes.h"
@@ -100,7 +100,7 @@ public:
    // ---------- const member functions ---------------------
 
    virtual double getEt(const CaloTower& iTower) const {
-      return iTower.hadEt()+iTower.outerEt();
+      return iTower.hadEt();
    }
 
    REGISTER_PROXYBUILDER_METHODS();
@@ -110,5 +110,26 @@ private:
    const FWHCalCaloTowerProxyBuilder& operator=(const FWHCalCaloTowerProxyBuilder&); // stop default
 };
 
+//
+// HOcal
+//
+
+class FWOCalCaloTowerProxyBuilder : public FWCaloTowerProxyBuilderBase {
+public:
+   FWOCalCaloTowerProxyBuilder( void ) {}
+   virtual ~FWOCalCaloTowerProxyBuilder( void ) {}
+
+   // ---------- const member functions ---------------------
+
+   virtual double getEt(const CaloTower& iTower) const {
+      return iTower.outerEt();
+   }
+
+   REGISTER_PROXYBUILDER_METHODS();
+private:
+   FWOCalCaloTowerProxyBuilder(const FWOCalCaloTowerProxyBuilder&); // stop default
+
+   const FWOCalCaloTowerProxyBuilder& operator=(const FWOCalCaloTowerProxyBuilder&); // stop default
+};
 
 #endif
