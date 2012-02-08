@@ -8,7 +8,7 @@
 //
 // Original Author:  
 //         Created:  Mon May 31 15:09:39 CEST 2010
-// $Id: FWCaloDataProxyBuilderBase.cc,v 1.4 2010/10/22 15:34:16 amraktad Exp $
+// $Id: FWCaloDataProxyBuilderBase.cc,v 1.5 2010/11/09 16:56:23 amraktad Exp $
 //
 
 // system include files
@@ -77,6 +77,7 @@ void
 FWCaloDataProxyBuilderBase::build(const FWEventItem* iItem,
                                   TEveElementList*, const FWViewContext*)
 {
+   bool blocked = gEve->GetSelection()->BlockSignals(true);
    setCaloData(iItem->context());
 
    assertCaloDataSlice();
@@ -86,18 +87,23 @@ FWCaloDataProxyBuilderBase::build(const FWEventItem* iItem,
    m_caloData->SetSliceTransparency(m_sliceIndex,item()->defaultDisplayProperties().transparency());
    m_caloData->DataChanged();
    m_caloData->CellSelectionChanged();
+   gEve->Redraw3D();
+   gEve->GetSelection()->BlockSignals(blocked);
 }
 
 //______________________________________________________________________________
 
 void
 FWCaloDataProxyBuilderBase::modelChanges(const FWModelIds&, Product* p)
-{
-   if(m_caloData && item())
-   {      
-      clearCaloDataSelection();
-      fillCaloData();    
+{   
+   bool blocked = gEve->GetSelection()->BlockSignals(true);
 
+   // printf("FWCaloDataProxyBuilderBase::modelChanges -- BEGIN %p\n", (void*)this);
+   if(m_caloData && item())
+   {
+
+      clearCaloDataSelection();
+      fillCaloData(); 
       TEveCaloData::vCellId_t& selected = m_caloData->GetCellsSelected();
       if(!selected.empty()) {
          if(0==m_caloData->GetSelectedLevel()) {
@@ -113,7 +119,9 @@ FWCaloDataProxyBuilderBase::modelChanges(const FWModelIds&, Product* p)
       m_caloData->SetSliceTransparency(m_sliceIndex,item()->defaultDisplayProperties().transparency());
       m_caloData->DataChanged();
       m_caloData->CellSelectionChanged();
+      gEve->Redraw3D();
    }
+   gEve->GetSelection()->BlockSignals(blocked);
 }
 //______________________________________________________________________________
 
